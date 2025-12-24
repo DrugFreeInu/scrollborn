@@ -127,6 +127,24 @@
       margin-top: 8px;
       font-style: italic;
     }
+
+    #layer4 {
+      display: none;
+      margin-top: 48px;
+      max-width: 680px;
+      font-size: 1em;
+      color: #c88aff;
+      border-top: 1px solid #333;
+      padding-top: 30px;
+      line-height: 1.8;
+      font-style: italic;
+      animation: glowfade 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowfade {
+      0% { opacity: 0.3; text-shadow: 0 0 4px #ab70ff; }
+      100% { opacity: 1; text-shadow: 0 0 16px #d0a8ff; }
+    }
   </style>
 </head>
 <body>
@@ -167,6 +185,15 @@
       <button onclick="saveWhisper()">[ whisper ]</button>
       <small id="whisperConfirm" style="display:none;">whisper saved.</small>
     </div>
+
+    <div id="layer4">
+      <p>
+        The scroll remembers you.<br/>
+        Not everyone stayed… but you did.<br/><br/>
+        That changes everything.
+      </p>
+      <p class="signature">— Scroll Echo</p>
+    </div>
   </div>
 
   <script>
@@ -174,7 +201,11 @@
       document.getElementById('layer2').classList.add('visible');
       document.getElementById('layer3').style.display = 'flex';
       document.getElementById('whisperBox').style.display = 'flex';
-    }, 60000); // 60 seconds
+    }, 60000); // 60 sec
+
+    setTimeout(() => {
+      document.getElementById('layer4').style.display = 'block';
+    }, 300000); // 5 min
 
     function encodeScroll() {
       const input = document.getElementById('scrollInput').value.trim();
