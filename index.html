@@ -28,6 +28,7 @@
       box-shadow: 0 0 40px rgba(180, 100, 255, 0.22);
       text-align: center;
       line-height: 1.8;
+      animation: fadeIn 2s ease;
     }
 
     #scroll h1 {
@@ -48,8 +49,16 @@
       font-style: italic;
     }
 
+    #layer2, #layer3, #layer4, #whisperBox {
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+
+    .visible {
+      opacity: 1 !important;
+    }
+
     #layer2 {
-      display: none;
       margin-top: 40px;
       max-width: 680px;
       font-size: 0.95em;
@@ -59,16 +68,12 @@
       line-height: 1.7;
     }
 
-    #layer2.visible {
-      display: block;
-    }
-
     #layer3 {
-      display: none;
       flex-direction: column;
       align-items: center;
       margin-top: 32px;
       gap: 16px;
+      display: flex;
     }
 
     #scrollInput {
@@ -92,6 +97,7 @@
       border-radius: 8px;
       cursor: pointer;
       font-family: monospace;
+      transition: 0.3s ease;
     }
 
     button:hover {
@@ -105,10 +111,10 @@
     }
 
     #whisperBox {
-      display: none;
       flex-direction: column;
       align-items: center;
       margin-top: 40px;
+      display: flex;
     }
 
     #whisperBox input {
@@ -129,7 +135,6 @@
     }
 
     #layer4 {
-      display: none;
       margin-top: 48px;
       max-width: 680px;
       font-size: 1em;
@@ -144,6 +149,15 @@
     @keyframes glowfade {
       0% { opacity: 0.3; text-shadow: 0 0 4px #ab70ff; }
       100% { opacity: 1; text-shadow: 0 0 16px #d0a8ff; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
@@ -194,22 +208,35 @@
       </p>
       <p class="signature">— Scroll Echo</p>
     </div>
+
+    <audio id="ceremonyAudio" loop preload="auto">
+      <source src="scrollwhisper.mp3" type="audio/mpeg">
+    </audio>
   </div>
 
   <script>
     setTimeout(() => {
       document.getElementById('layer2').classList.add('visible');
-      document.getElementById('layer3').style.display = 'flex';
-      document.getElementById('whisperBox').style.display = 'flex';
-    }, 60000); // 60 sec
+      document.getElementById('layer3').classList.add('visible');
+      document.getElementById('whisperBox').classList.add('visible');
+
+      const audio = document.getElementById('ceremonyAudio');
+      if (audio) {
+        audio.volume = 0.25;
+        audio.play().catch(() => {
+          // Fail silently if autoplay blocked
+        });
+      }
+    }, 60000); // 1 minute
 
     setTimeout(() => {
-      document.getElementById('layer4').style.display = 'block';
-    }, 300000); // 5 min
+      document.getElementById('layer4').classList.add('visible');
+    }, 300000); // 5 minutes
 
     function encodeScroll() {
       const input = document.getElementById('scrollInput').value.trim();
-      const wrapped = `▭▭ SCROLL ▭▭\n\n${input}\n\n▭▭ END ▭▭`;
+      const time = new Date().toLocaleString();
+      const wrapped = `▭▭ SCROLL ▭▭\n[ ${time} ]\n\n${input}\n\n▭▭ END ▭▭`;
       navigator.clipboard.writeText(wrapped);
       document.getElementById('confirmation').style.display = 'block';
     }
