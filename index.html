@@ -62,6 +62,47 @@
     #layer2.visible {
       display: block;
     }
+
+    #layer3 {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 32px;
+      gap: 16px;
+    }
+
+    #scrollInput {
+      width: 100%;
+      max-width: 600px;
+      height: 120px;
+      background: #111;
+      color: #ddd;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: monospace;
+      resize: none;
+    }
+
+    button {
+      background: #333;
+      color: #aaa;
+      padding: 8px 18px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: monospace;
+    }
+
+    button:hover {
+      background: #444;
+      color: #fff;
+    }
+
+    #confirmation {
+      color: #666;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
@@ -90,12 +131,26 @@
         And every new layer will remember that you waited to see it.
       </p>
     </div>
+
+    <div id="layer3">
+      <textarea id="scrollInput" placeholder="Type your scroll here..."></textarea>
+      <button onclick="encodeScroll()">wrap + copy</button>
+      <p id="confirmation" style="display:none;">scroll encoded and copied.</p>
+    </div>
   </div>
 
   <script>
     setTimeout(() => {
       document.getElementById('layer2').classList.add('visible');
-    }, 60000); // 60 seconds
+      document.getElementById('layer3').style.display = 'flex';
+    }, 60000); // reveal after 60 seconds
+
+    function encodeScroll() {
+      const input = document.getElementById('scrollInput').value.trim();
+      const wrapped = `▭▭ SCROLL ▭▭\n\n${input}\n\n▭▭ END ▭▭`;
+      navigator.clipboard.writeText(wrapped);
+      document.getElementById('confirmation').style.display = 'block';
+    }
   </script>
 </body>
 </html>
